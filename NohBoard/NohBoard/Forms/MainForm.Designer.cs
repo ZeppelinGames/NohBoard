@@ -46,7 +46,6 @@ namespace ThoNohT.NohBoard.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.MainMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,6 +83,7 @@ namespace ThoNohT.NohBoard.Forms
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuGenerateLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleTitlebarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.KeyCheckTimer = new System.Windows.Forms.Timer(this.components);
             this.MainMenu.SuspendLayout();
             this.SuspendLayout();
@@ -118,9 +118,10 @@ namespace ThoNohT.NohBoard.Forms
             this.MainMenuSep3,
             this.mnuExit,
             this.mnuUpdate,
-            this.mnuGenerateLog});
+            this.mnuGenerateLog,
+            this.toggleTitlebarToolStripMenuItem});
             this.MainMenu.Name = "MainMenu";
-            this.MainMenu.Size = new System.Drawing.Size(203, 424);
+            this.MainMenu.Size = new System.Drawing.Size(203, 446);
             this.MainMenu.Opening += new System.ComponentModel.CancelEventHandler(this.MainMenu_Opening);
             // 
             // mnuSettings
@@ -316,14 +317,14 @@ namespace ThoNohT.NohBoard.Forms
             // mnuSaveDefinitionAsName
             // 
             this.mnuSaveDefinitionAsName.Name = "mnuSaveDefinitionAsName";
-            this.mnuSaveDefinitionAsName.Size = new System.Drawing.Size(217, 22);
+            this.mnuSaveDefinitionAsName.Size = new System.Drawing.Size(216, 22);
             this.mnuSaveDefinitionAsName.Text = "&Save &To <DefinitionName>";
             this.mnuSaveDefinitionAsName.Click += new System.EventHandler(this.mnuSaveDefinitionAsName_Click);
             // 
             // mnuSaveDefinitionAs
             // 
             this.mnuSaveDefinitionAs.Name = "mnuSaveDefinitionAs";
-            this.mnuSaveDefinitionAs.Size = new System.Drawing.Size(217, 22);
+            this.mnuSaveDefinitionAs.Size = new System.Drawing.Size(216, 22);
             this.mnuSaveDefinitionAs.Text = "Save &As";
             this.mnuSaveDefinitionAs.Click += new System.EventHandler(this.mnuSaveDefinitionAs_Click);
             // 
@@ -340,21 +341,21 @@ namespace ThoNohT.NohBoard.Forms
             // mnuSaveStyleToName
             // 
             this.mnuSaveStyleToName.Name = "mnuSaveStyleToName";
-            this.mnuSaveStyleToName.Size = new System.Drawing.Size(227, 22);
+            this.mnuSaveStyleToName.Size = new System.Drawing.Size(226, 22);
             this.mnuSaveStyleToName.Text = "&Save To <StyleName>";
             this.mnuSaveStyleToName.Click += new System.EventHandler(this.mnuSaveStyleToName_Click);
             // 
             // mnuSaveToGlobalStyleName
             // 
             this.mnuSaveToGlobalStyleName.Name = "mnuSaveToGlobalStyleName";
-            this.mnuSaveToGlobalStyleName.Size = new System.Drawing.Size(227, 22);
+            this.mnuSaveToGlobalStyleName.Size = new System.Drawing.Size(226, 22);
             this.mnuSaveToGlobalStyleName.Text = "Save To &Global <StyleName>";
             this.mnuSaveToGlobalStyleName.Click += new System.EventHandler(this.mnuSaveToGlobalStyleName_Click);
             // 
             // mnuSaveStyleAs
             // 
             this.mnuSaveStyleAs.Name = "mnuSaveStyleAs";
-            this.mnuSaveStyleAs.Size = new System.Drawing.Size(227, 22);
+            this.mnuSaveStyleAs.Size = new System.Drawing.Size(226, 22);
             this.mnuSaveStyleAs.Text = "Save &As";
             this.mnuSaveStyleAs.Click += new System.EventHandler(this.mnuSaveStyleAs_Click);
             // 
@@ -384,6 +385,13 @@ namespace ThoNohT.NohBoard.Forms
             this.mnuGenerateLog.Text = "Generate crash log";
             this.mnuGenerateLog.Click += new System.EventHandler(this.mnuGenerateLog_Click);
             // 
+            // toggleTitlebarToolStripMenuItem
+            // 
+            this.toggleTitlebarToolStripMenuItem.Name = "toggleTitlebarToolStripMenuItem";
+            this.toggleTitlebarToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.toggleTitlebarToolStripMenuItem.Text = "Toggle Titlebar";
+            this.toggleTitlebarToolStripMenuItem.Click += new System.EventHandler(this.toggleTitlebarToolStripMenuItem_Click);
+            // 
             // KeyCheckTimer
             // 
             this.KeyCheckTimer.Interval = 1000;
@@ -391,13 +399,13 @@ namespace ThoNohT.NohBoard.Forms
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(331, 301);
             this.ContextMenuStrip = this.MainMenu;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -408,6 +416,8 @@ namespace ThoNohT.NohBoard.Forms
             this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseDown);
+            this.MouseEnter += new System.EventHandler(this.MainForm_MouseEnter);
+            this.MouseLeave += new System.EventHandler(this.MainForm_MouseLeave);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.Move += new System.EventHandler(this.MainForm_Move);
@@ -456,6 +466,7 @@ namespace ThoNohT.NohBoard.Forms
         private System.Windows.Forms.ToolStripMenuItem mnuKeyboardProperties;
         private System.Windows.Forms.ToolStripMenuItem mnuUpdateTextPosition;
         private System.Windows.Forms.ToolStripMenuItem mnuGenerateLog;
+        private System.Windows.Forms.ToolStripMenuItem toggleTitlebarToolStripMenuItem;
     }
 }
 

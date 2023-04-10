@@ -88,7 +88,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
                             ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
             var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed: style?.Loose ?? defaultStyle.Loose;
+            var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed : style?.Loose ?? defaultStyle.Loose;
 
             var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
             var txtPoint = new TPoint(
@@ -100,9 +100,18 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
 
             // Draw the text
+            //g.DrawString("Test", subStyle.Font, new SolidBrush(subStyle.Text), txtPoint.point);
             g.SetClip(this.GetBoundingBox());
-            g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
+           /* try
+            {
+                g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
+            } catch (ArgumentException e)
+            {
+                Console.WriteLine(this.GetText(shift, capsLock));
+                Console.WriteLine(e);
+            }*/
             g.ResetClip();
+
 
             // Draw the outline.
             if (subStyle.ShowOutline)

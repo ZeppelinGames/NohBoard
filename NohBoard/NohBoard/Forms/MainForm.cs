@@ -35,7 +35,10 @@ namespace ThoNohT.NohBoard.Forms
     using System.Windows.Forms;
     using System.Xml;
     using ThoNohT.NohBoard.Keyboard.Styles;
-    using Version = NohBoard.Version;
+    using System.Drawing.Drawing2D;
+    using Version = NohBoard.VersionInfo;
+
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// The main form.
@@ -60,9 +63,18 @@ namespace ThoNohT.NohBoard.Forms
         /// </summary>
         private VersionInfo latestVersion = null;
 
+        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private const UInt32 SWP_NOSIZE = 0x0001;
+        private const UInt32 SWP_NOMOVE = 0x0002;
+        private const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+
         #endregion Fields
 
         #region Constructors
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm" /> class.
@@ -104,13 +116,14 @@ namespace ThoNohT.NohBoard.Forms
 
                     var versionInfo = downloadVersionInfo(updateUrl);
 
-                    if ((versionInfo.Major > Version.Major) ||
-                        (versionInfo.Major == Version.Major && versionInfo.Minor > Version.Minor) ||
-                        (versionInfo.Major == Version.Major && versionInfo.Minor == Version.Minor
-                         && versionInfo.Patch > Version.Patch))
-                    {
-                        this.latestVersion = versionInfo;
-                    }
+                    /* if ((versionInfo.mMajor > Version.Major) ||
+                         (versionInfo.mMajor == Version.Major && versionInfo.mMinor > Version.Minor) ||
+                         (versionInfo.mMajor == Version.Major && versionInfo.mMinor == Version.Minor
+                          && versionInfo.mPatch > Version.Patch))
+                     {
+                         this.latestVersion = versionInfo;
+                     }*/
+                    this.latestVersion = versionInfo;
                 });
         }
 
@@ -350,6 +363,8 @@ namespace ThoNohT.NohBoard.Forms
         /// </summary>
         private void MainForm_Load(object sender, EventArgs e)
         {
+            SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+
             // Load the settings
             if (!GlobalSettings.Load())
             {
@@ -362,7 +377,7 @@ namespace ThoNohT.NohBoard.Forms
             this.Location = new Point(GlobalSettings.Settings.X, GlobalSettings.Settings.Y);
             var title = GlobalSettings.Settings.WindowTitle;
 
-            this.Text = string.IsNullOrWhiteSpace(title) ? $"NohBoard {Version.Get}" : title;
+            //this.Text = string.IsNullOrWhiteSpace(title) ? $"NohBoard {Version.Get}" : title;
 
             this.GetLatestVersion().Start();
 
@@ -470,7 +485,7 @@ namespace ThoNohT.NohBoard.Forms
             HookManager.PressHold = GlobalSettings.Settings.PressHold;
 
             var title = GlobalSettings.Settings.WindowTitle;
-            this.Text = string.IsNullOrWhiteSpace(title) ? $"NohBoard {Version.Get}" : title;
+            //this.Text = string.IsNullOrWhiteSpace(title) ? $"NohBoard {Version.Get}" : title;
 
             this.LoadKeyboard();
         }
@@ -588,15 +603,25 @@ namespace ThoNohT.NohBoard.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
+            //Hopefully make it transparent
             e.Graphics.Clear(GlobalSettings.CurrentStyle.BackgroundColor);
+            e.Graphics.CompositingMode = CompositingMode.SourceCopy;
+            this.TransparencyKey = GlobalSettings.CurrentStyle.BackgroundColor;
+
+            if (drawOutline)
+            {
+                Rectangle r = new Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width -1, e.ClipRectangle.Height -1);
+                e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.White), 1), r);
+            }
 
             if (GlobalSettings.CurrentDefinition == null || !this.backBrushes.Any())
                 return;
 
             // Fill the appropriate back brush.
-            e.Graphics.FillRectangle(
+            /*e.Graphics.FillRectangle(
                 this.backBrushes[KeyboardState.ShiftDown][KeyboardState.CapsActive],
                 new Rectangle(0, 0, GlobalSettings.CurrentDefinition.Width, GlobalSettings.CurrentDefinition.Height));
+            */
 
             // Render all keys.
             KeyboardState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
@@ -715,6 +740,27 @@ namespace ThoNohT.NohBoard.Forms
             {
                 throw new Exception("A crash log was requested.");
             }
+        }
+
+
+        private bool titlebarState;
+        private void toggleTitlebarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            titlebarState = !titlebarState;
+            this.FormBorderStyle = titlebarState ? FormBorderStyle.None : FormBorderStyle.FixedSingle;
+        }
+
+        private bool drawOutline = false;
+        private void MainForm_MouseEnter(object sender, EventArgs e)
+        {
+            drawOutline = true;
+            this.Refresh();
+        }
+
+        private void MainForm_MouseLeave(object sender, EventArgs e)
+        {
+            drawOutline = false;
+            this.Refresh();
         }
     }
 }

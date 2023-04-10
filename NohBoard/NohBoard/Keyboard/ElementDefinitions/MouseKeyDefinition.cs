@@ -78,7 +78,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
 
             // Draw the text
             g.SetClip(this.GetBoundingBox());
-            g.DrawString(this.Text, subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
+            //g.DrawString(this.Text, subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
             g.ResetClip();
 
             // Draw the outline.

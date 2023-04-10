@@ -40,6 +40,8 @@ namespace ThoNohT.NohBoard.Extra
         [DataMember]
         public int Y { get; private set; }
 
+        public Point point { get => new Point(X, Y); }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TPoint" /> class.
         /// </summary>
